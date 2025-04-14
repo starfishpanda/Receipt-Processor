@@ -1,3 +1,41 @@
+# Receipt Processor
+
+A simple REST API service that processes receipts and calculates points based on provided rules.
+
+## API Endpoints
+
+- `POST /receipts/process`: Submit a receipt for processing and get a unique ID
+- `GET /receipts/{id}/points`: Get the points calculated for a receipt using its ID
+
+## Technologies Used
+
+- TypeScript
+- Node.js
+- Express.js
+- UUID for generating unique IDs
+
+## Running the Application
+
+### Prerequisites
+
+- Docker installed on your system
+- No need to configure environment variables
+
+### Using Docker
+
+1. Clone this repository
+2. Navigate to the project directory
+3. Build and run the Docker container:
+
+```bash
+# Build the Docker image
+docker build -t receipt-processor .
+
+# Run the container
+docker run -p 3000:3000 receipt-processor
+```
+
+The API should now be accessible at http://localhost:3000
 
 ## Design Tradeoff Considerations
 
