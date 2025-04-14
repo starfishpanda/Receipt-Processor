@@ -9,5 +9,5 @@ const __dirname = dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 export const config = {
-  port: process.env.PORT || 3000
-} as const
+  port: process.env.PORT || 3000,
+} as const;

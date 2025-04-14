@@ -1,5 +1,15 @@
-# Build Stage
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
-# Runtime Stage
+WORKDIR /app
 
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]

@@ -1,4 +1,4 @@
-import { Receipt } from './Receipt.js'
+import { Receipt } from './Receipt.js';
 
 export interface ReceiptWithPoints {
   receipt: Receipt;

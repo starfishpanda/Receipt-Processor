@@ -1,11 +1,10 @@
-import express from 'express'
-import receiptController from '@/controllers/receiptController.js'
+import express from 'express';
+import receiptController from '../controllers/receiptController.js';
 
-const apiRouter = express.Router()
+const apiRouter = express.Router();
 
-apiRouter.post('/receipts/process', receiptController.processReceipts)
+apiRouter.post('/receipts/process', receiptController.processReceipt);
 
-apiRouter.get('/receipts/{id}/points', receiptController.getPoints)
+apiRouter.get('/receipts/:id/points', receiptController.getPoints);
 
-
-export default apiRouter
+export default apiRouter;
