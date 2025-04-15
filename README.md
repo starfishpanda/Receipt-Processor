@@ -13,6 +13,7 @@ A simple REST API service that processes receipts and calculates points based on
 - Node.js
 - Express.js
 - UUID for generating unique IDs
+- Docker
 
 ## Running the Application
 
