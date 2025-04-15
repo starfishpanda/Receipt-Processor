@@ -12,6 +12,14 @@ import {
   oddDayPoints,
   timeWindowPoints,
 } from '../utils/pointsCalculator.js';
+
+import {
+  isValidRetailer,
+  isValidPurchaseDate,
+  isValidPurchaseTime,
+  isValidItems,
+  isValidTotal,
+} from '../utils/validReceiptFields.js';
 // In-Memory Store of IDs and points
 const receiptDatabase: Map<string, ReceiptWithPoints> = new Map();
 
@@ -65,20 +73,61 @@ export const calculatePoints = (receiptId: ReceiptId): PointsResponse => {
   return { points };
 };
 
-export const getStoredPoints = (receiptId: ReceiptId): PointsResponse => {
+export const getStoredPoints = (receiptId: ReceiptId): PointsResponse | undefined => {
   const { id } = receiptId;
   // console.log('Receipt Service: Received ID:', id)
 
   const receiptWithPoints: ReceiptWithPoints | undefined = receiptDatabase.get(id);
 
   if (!receiptWithPoints || !receiptWithPoints.points) {
-    console.error('Unable to calculate points without receipt record.');
-    throw new Error('Id and associated receipt not found');
+    console.error('No receipt found for that ID.');
+    return undefined;
   }
 
   const { points } = receiptWithPoints;
 
   return { points };
+};
+
+// Validate 1) receipt field presence and 2) receipt field format
+export const validateReceipt = (receipt: Receipt): { isValid: boolean; errors: string[] } => {
+  const errors: string[] = [];
+
+  // Check retailer
+  if (!receipt.retailer) {
+    errors.push('Retailer is missing');
+  } else if (!isValidRetailer(receipt.retailer)) {
+    errors.push('Retailer is invalid');
+  }
+
+  // Check purchaseDate
+  if (!receipt.purchaseDate) {
+    errors.push('Purchase date is missing');
+  } else if (!isValidPurchaseDate(receipt.purchaseDate)) {
+    errors.push('Purchase date is invalid. Expected format: YYYY-MM-DD');
+  }
+
+  // Check purchaseTime
+  if (!receipt.purchaseTime) {
+    errors.push('Purchase time is missing');
+  } else if (!isValidPurchaseTime(receipt.purchaseTime)) {
+    errors.push('Purchase time is invalid. Expected format: HH:MM');
+  }
+
+  // Check items list
+  if (!receipt.items) {
+    errors.push('Items are missing');
+  } else if (!isValidItems(receipt.items)) {
+    errors.push('Items are invalid. Each item must have a valid description and price');
+  }
+
+  // Check total
+  if (!receipt.total) {
+    errors.push('Total is missing');
+  } else if (!isValidTotal(receipt.total)) {
+    errors.push('Total is invalid or does not match the sum of item prices');
+  }
+  return { isValid: errors.length === 0, errors };
 };
 
 //
